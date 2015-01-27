@@ -1,0 +1,6 @@
+
+el archivo csv tiene esta distribucion
+
+time, Altura signicativa de la ola (para graficar el oleaje), direccion primaria de la ola (importante todos los datos que refieren a angulos -los de direccion- estan encerrados entre parentesis) (direccion para la fechas de oleaje -las de abajo-), periodo medio de la ola (para agregar con las fechas de oleaje -las de abajo-), direccion del viento (para las fechas de viento -las de arriba-), velocidad del viento (para graficar la linea de viento y tambien para las lineas que traen las flechas de viento en la cola), luego hay otros datos pero esos es para otra cosa.
+
+en fin hay estan los datos y los machotes de como seria la grafica, te repito la idea para poder tener referencia para el tiempo en el grafico es simple tener una marca de agua con diferentes tonos en el fondo de la grafica y que asi se vea la transición de los dias el nombre del dia en formato recortado (lun,mar.mier,jue,vie,sab,dom) y el numero del dia (01,02,03......)
