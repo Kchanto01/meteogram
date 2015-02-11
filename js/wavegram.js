@@ -935,4 +935,6 @@ $(function() {
     ];
 
     var wgram = new Wavegram(wData, 'container');
+
+    var wgram = new Wavegram(wData, 'container2');
 });
