@@ -2,7 +2,7 @@
  * Wavegram prototype to plot.
  *
  */
-function Wavegram(wData, container) {
+function Wavegram(wData, container, container2) {
 	this.waveHeight = [];
     this.waveDirection = [];
     this.maxWaveHeight = [];
@@ -11,11 +11,12 @@ function Wavegram(wData, container) {
 
     // Initialize
     this.waveData = wData;
-    this.container = container;
+    this.waveContainer = container;
+    this.windContainer = container2;
 
     this.colors = [
         Highcharts.getOptions().colors[0],
-        Highcharts.getOptions().colors[6]
+        Highcharts.getOptions().colors[5]
     ];
 
     // Run
@@ -52,30 +53,11 @@ Wavegram.prototype.parseWaveData = function () {
             return;
         }
 
-        // If it is more than an hour between points, show all symbols
-        /*if (i === 0) {
-            wgram.resolution = to - from;
-        }*/
-
         // Populate the parallel arrays
         wgram.waveHeight.push({
             x: from,
-            y: obj['Significant_height_of_combined_wind_waves_and_swell_surface'],
-            //to: to,
-            //index: i
+            y: obj['Significant_height_of_combined_wind_waves_and_swell_surface']
         });
-        /*if (i==0) {
-            console.log( new Date(from).toString() );
-            var date = new Date(fecha[0], fecha[1], fecha[2], hora, 0, 0);
-            console.log("KK:");
-            console.log("Original: " + obj['Time'] );
-            console.log("1) " + Date.parse(obj['Time']));
-            console.log("2) " + from);
-
-            console.log("KK2:");
-            console.log("Response 1: " + new Date( Date.parse(obj['Time']) ) );
-            console.log("Response 2: " + new Date( from ) );
-        }*/
         wgram.maxWaveHeight.push({
             x: from,
             y: (parseFloat( wgram.waveHeight[i]['y'] ) * 1.3),
@@ -97,9 +79,11 @@ Wavegram.prototype.parseWaveData = function () {
         }
     });
 
-	//console.log("kkkk: " + wgram.waveHeight);
+    //console.log(wgram.windSpeed);
+
     // Create the chart when the data is loaded
-    this.createChart();
+    this.createWaveChart();
+    this.createWindChart();
 };
 
 /**
@@ -107,6 +91,8 @@ Wavegram.prototype.parseWaveData = function () {
  * HTML for the tooltip.
  */
 Wavegram.prototype.tooltipFormatter = function (tooltip) {
+
+    var wgram = this;
 
     // Create the header with reference to the time interval
     var index = tooltip.points[0].point.index,
@@ -136,12 +122,12 @@ Wavegram.prototype.tooltipFormatter = function (tooltip) {
 /**
  * Build and return the Highcharts options structure
  */
-Wavegram.prototype.getChartOptions = function () {
+Wavegram.prototype.getWaveChartOptions = function () {
     var wavegram = this;
 
     return {
         chart: {
-            renderTo: this.container,
+            renderTo: this.waveContainer,
             marginBottom: 70,
             marginRight: 40,
             marginTop: 50,
@@ -151,17 +137,17 @@ Wavegram.prototype.getChartOptions = function () {
         },
 
         title: {
-            text: "Wavegram",//this.getTitle(),
+            text: "Wave Data",//this.getTitle(),
             align: 'left'
         },
 
-        credits: {
+        /*credits: {
             text: 'Forecast from <a href="http://yr.no">yr.no</a>',
             href: "google.com",//this.xml.credit.link['@attributes'].url,
             position: {
                 x: -40
             }
-        },
+        },*/
 
         tooltip: {
             shared: true,
@@ -232,32 +218,9 @@ Wavegram.prototype.getChartOptions = function () {
             }],
             maxPadding: 0.3,
             tickInterval: 1,
+            gridLineWidth: 0,
             gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0'
 
-        }, { // Wind Speed y1
-            allowDecimals: false,
-            title: { // Title on top of axis
-                text: "Wind Speed (Knots)",
-                //offset: 0,
-                //align: 'high',
-                //rotation: 0,
-                style: {
-                    fontSize: '10px',
-                    color: wavegram.colors[1]
-                },
-                //textAlign: 'left',
-                x: 3
-            },
-            labels: {
-                style: {
-                    fontSize: '8px',
-                    color: wavegram.colors[1]
-                },
-                y: 2,
-                x: 3
-            },
-            gridLineWidth: 0,
-            opposite: true,
         }],
 
         legend: {
@@ -266,19 +229,6 @@ Wavegram.prototype.getChartOptions = function () {
 
 
         series: [{
-            name: 'Wind Speed',
-            color: wavegram.colors[1],
-            data: this.windSpeed,
-            marker: {
-                enabled: false
-            },
-            shadow: false,
-            tooltip: {
-                valueSuffix: 'kt'
-            },
-            //dashStyle: 'shortdot',
-            yAxis: 1
-        }, {
             name: 'Max Wave Height',
             data: this.maxWaveHeight,
             type: 'spline',
@@ -321,9 +271,148 @@ Wavegram.prototype.getChartOptions = function () {
 };
 
 /**
+ * Build and return the Highcharts options structure
+ */
+Wavegram.prototype.getWindChartOptions = function () {
+    var wavegram = this;
+
+    return {
+        chart: {
+            renderTo: this.windContainer,
+            marginBottom: 70,
+            marginRight: 40,
+            marginTop: 50,
+            plotBorderWidth: 1,
+            width: 800,
+            height: 310
+        },
+
+        title: {
+            text: "Wind Data",//this.getTitle(),
+            align: 'left'
+        },
+
+        /*credits: {
+            text: 'Forecast from <a href="http://yr.no">yr.no</a>',
+            href: "google.com",//this.xml.credit.link['@attributes'].url,
+            position: {
+                x: -40
+            }
+        },*/
+
+        tooltip: {
+            shared: true,
+            useHTML: true,
+            style: {
+                width: 100
+            },
+            formatter: function () {
+                return wavegram.tooltipFormatter(this);
+            }
+        },
+
+        xAxis: [{ // Bottom X axis
+            type: 'datetime',
+            tickInterval: 6 * 36e5, // two hours
+            //minorTickInterval: 3 * 36e5, // one hour
+            tickLength: 0,
+            gridLineWidth: 1,
+            gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0',
+            startOnTick: true,
+            endOnTick: false,
+            minPadding: 0.035,
+            maxPadding: 0.035,
+            offset: 30,
+            showLastLabel: true,
+            showFirstLabel: false,
+            labels: {
+                format: '{value:<span style="font-size:8px">%H:00</span>}'
+            }
+        }, { // Top X axis
+            linkedTo: 0,
+            type: 'datetime',
+            tickInterval: 24 * 3600 * 1000,
+            labels: {
+                format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+                align: 'left',
+                x: 3,
+                y: -5
+            },
+            opposite: true,
+            tickLength: 20,
+            gridLineWidth: 1,
+            showLastLabel: false,
+            showFirstLabel: true
+        }],
+
+        yAxis: [{ // Wave Height axis
+            title: {
+                text: "Wind Speed (Knots)",
+                //offset: 0,
+                //align: 'high',
+                //rotation: 0,
+                style: {
+                    fontSize: '12px',
+                    color: wavegram.colors[1]
+                }
+            },
+            labels: {
+                format: '{value}kt',
+                style: {
+                    fontSize: '10px',
+                    color: wavegram.colors[1]
+                },
+                x: -3
+            },
+            plotLines: [{ // zero plane
+                value: 0,
+                color: '#BBBBBB',
+                width: 1,
+                zIndex: 2
+            }],
+            maxPadding: 0.3,
+            gridLineWidth: 0,
+            //tickInterval: 100,
+            //minorTickInterval: 0,
+            gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0'
+
+        }],
+
+        legend: {
+            enabled: false
+        },
+
+
+        series: [{
+            name: 'Wind Speed',
+            color: wavegram.colors[1],
+            data: this.windSpeed,
+            marker: {
+                enabled: false
+            },
+            shadow: false,
+            tooltip: {
+                valueSuffix: 'kt'
+            },
+            //dashStyle: 'shortdot',
+            yAxis: 0
+        }]
+    }
+};
+
+/**
  * Post-process the chart from the callback function, the second argument to Highcharts.Chart.
  */
-Wavegram.prototype.onChartLoad = function (chart) {
+Wavegram.prototype.onWaveChartLoad = function (chart) {
+    //this.drawWeatherSymbols(chart);
+    this.drawWaveArrows(chart);
+    this.drawBlocksForWindArrows(chart);
+};
+
+/**
+ * Post-process the chart from the callback function, the second argument to Highcharts.Chart.
+ */
+Wavegram.prototype.onWindChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawWindArrows(chart);
     this.drawBlocksForWindArrows(chart);
@@ -332,10 +421,20 @@ Wavegram.prototype.onChartLoad = function (chart) {
 /**
  * Create the chart. This function is called async when the data file is loaded and parsed.
  */
-Wavegram.prototype.createChart = function () {
+Wavegram.prototype.createWaveChart = function () {
     var wavegram = this;
-    this.chart = new Highcharts.Chart(this.getChartOptions(), function (chart) {
-        wavegram.onChartLoad(chart);
+    this.chart = new Highcharts.Chart(this.getWaveChartOptions(), function (chart) {
+        wavegram.onWaveChartLoad(chart);
+    });
+};
+
+/**
+ * Create the chart. This function is called async when the data file is loaded and parsed.
+ */
+Wavegram.prototype.createWindChart = function () {
+    var wavegram = this;
+    this.chart = new Highcharts.Chart(this.getWindChartOptions(), function (chart) {
+        wavegram.onWindChartLoad(chart);
     });
 };
 
@@ -343,7 +442,7 @@ Wavegram.prototype.createChart = function () {
  * Create wind speed symbols for the Beaufort wind scale. The symbols are rotated
  * around the zero centerpoint.
  */
-Wavegram.prototype.windArrow = function () {
+Wavegram.prototype.windArrow = function (conPalitos) {
     var level,
         path;
 
@@ -356,6 +455,42 @@ Wavegram.prototype.windArrow = function () {
         0, 7,
         0, -10 // top
     ];
+
+    if(conPalitos) {
+        level = $.inArray(name, ['Calm', 'Light air', 'Light breeze', 'Gentle breeze', 'Moderate breeze',
+        'Fresh breeze', 'Strong breeze', 'Near gale', 'Gale', 'Strong gale', 'Storm',
+        'Violent storm', 'Hurricane']);
+
+        level = 4;
+
+        if (level === 0) {
+            path = [];
+        }
+
+        if (level === 2) {
+            path.push('M', 0, -8, 'L', 4, -8); // short line
+        } else if (level >= 3) {
+            path.push(0, -10, 7, -10); // long line
+        }
+
+        if (level === 4) {
+            path.push('M', 0, -7, 'L', 4, -7);
+        } else if (level >= 5) {
+            path.push('M', 0, -7, 'L', 7, -7);
+        }
+
+        if (level === 5) {
+            path.push('M', 0, -4, 'L', 4, -4);
+        } else if (level >= 6) {
+            path.push('M', 0, -4, 'L', 7, -4);
+        }
+
+        if (level === 7) {
+            path.push('M', 0, -1, 'L', 4, -1);
+        } else if (level >= 8) {
+            path.push('M', 0, -1, 'L', 7, -1);
+        }
+    }
 
     return path;
 };
@@ -373,7 +508,36 @@ Wavegram.prototype.drawWindArrows = function (chart) {
         x = point.plotX + chart.plotLeft;
         y = 255;
         arrow = chart.renderer.path(
-                wavegram.windArrow()
+                wavegram.windArrow(true)
+            ).attr({
+                rotation: parseInt(wavegram.windDirection[i], 10),
+                translateX: x, // rotation center
+                translateY: y // rotation center
+            });
+
+        arrow.attr({
+                stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                'stroke-width': 1.5,
+                zIndex: 5
+            })
+            .add();
+    });
+};
+
+/**
+ * Draw the wind arrows. Each arrow path is generated by the windArrow function above.
+ */
+Wavegram.prototype.drawWaveArrows = function (chart) {
+    var wavegram = this;
+
+    $.each(chart.series[0].data, function (i, point) {
+        var sprite, arrow, x, y;
+
+        // Draw the wind arrows
+        x = point.plotX + chart.plotLeft;
+        y = 255;
+        arrow = chart.renderer.path(
+                wavegram.windArrow(false)
             ).attr({
                 rotation: parseInt(wavegram.waveDirection[i], 10),
                 translateX: x, // rotation center
@@ -934,7 +1098,5 @@ $(function() {
       }
     ];
 
-    var wgram = new Wavegram(wData, 'container');
-
-    var wgram = new Wavegram(wData, 'container2');
+    var wgram = new Wavegram(wData, 'container', 'container2');
 });
