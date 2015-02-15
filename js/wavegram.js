@@ -114,7 +114,7 @@ Wavegram.prototype.tooltipFormatter = function (tooltip) {
             'm' + '</td></tr>';
 
     hilera = "" + wgram.waveDirection[index];
-    ret += '<tr><td><span style="color:#000">\u2196</span>' + 'Wave Direction: ' +
+    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Wave Direction: ' +
             '</td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>5)?5:hilera.length) +
             '\u00B0' + '</td></tr>';
 
