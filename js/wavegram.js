@@ -113,23 +113,25 @@ Wavegram.prototype.tooltipFormatter = function (tooltip) {
             ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
             'm' + '</td></tr>';
 
-    ret += '<tr><td>' + 'Wave Direction: ' +
-            ': </td><td style="white-space:nowrap;">' + '<span style="color:#000">\u2196</span>' +
-            '</td></tr>';
+    hilera = "" + wgram.waveDirection[index];
+    ret += '<tr><td><span style="color:#000">\u2196</span>' + 'Wave Direction: ' +
+            '</td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>5)?5:hilera.length) +
+            '\u00B0' + '</td></tr>';
 
     hilera = "" + wgram.windSpeed[index].y;
     ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Average Wind Speed' +
             ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
             ' knots' + '</td></tr>';
 
-    ret += '<tr><td>' + 'Wind Direction: ' +
-            ': </td><td style="white-space:nowrap;">' + '<span style="color:#000; font-size:16px;">\u21A2</span>' +
-            '</td></tr>';
+    hilera = "" + wgram.windDirection[index];
+    ret += '<tr><td><span style="color:#000; font-size:16px;">\u21A2</span> ' + 'Wind Direction: ' +
+            '</td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>5)?5:hilera.length) +
+            '\u00B0' + '</td></tr>';
     // Close
     ret += '</table>';
 
 
-    return "<div style='width: 250px; white-space:normal;'>" + ret + "</div>";
+    return "<div style='width: 280px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
