@@ -46,7 +46,7 @@ Wavegram.prototype.parseWaveData = function () {
         var fecha=obj['Time'].split(" ")[0].split("-"),
             hora=obj['Time'].split(" ")[1].split(":")[0];
 
-        var from = Date.parse( obj['Time'].replace(/-/g, "/") ),//Date.parse( new Date(fecha[0], fecha[1]-1, fecha[2], hora, 0, 0) ),
+        var from = Date.parse( obj['Time'].replace(/-/g, "/") ) - (6 * 36e5),//Date.parse( new Date(fecha[0], fecha[1]-1, fecha[2], hora, 0, 0) ),
             to = from + (6 * 36e5);//Date.parse( new Date(fecha[0], fecha[1], fecha[2], hora, 0, 0) ) + (6 * 36e5);
 
         if (to > pointStart + 4 * 24 * 36e5) {
@@ -103,20 +103,33 @@ Wavegram.prototype.tooltipFormatter = function (tooltip) {
 
     ret += '<table>';
 
-    // Add all series
-    Highcharts.each(tooltip.points, function (point) {
-        var series = point.series;
-        var hilera = Highcharts.pick(point.point.value, point.y) + "";
-        ret += '<tr><td><span style="color:' + series.color + '">\u25CF</span> ' + series.name +
+    var hilera = "" + wgram.maxWaveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Max Wave Height' +
             ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
-            series.options.tooltip.valueSuffix + '</td></tr>';
-    });
+            'm' + '</td></tr>';
 
+    hilera = "" + wgram.waveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Average Wave Height' +
+            ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
+            'm' + '</td></tr>';
+
+    ret += '<tr><td>' + 'Wave Direction: ' +
+            ': </td><td style="white-space:nowrap;">' + '<span style="color:#000">\u2196</span>' +
+            '</td></tr>';
+
+    hilera = "" + wgram.windSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Average Wind Speed' +
+            ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
+            ' knots' + '</td></tr>';
+
+    ret += '<tr><td>' + 'Wind Direction: ' +
+            ': </td><td style="white-space:nowrap;">' + '<span style="color:#000; font-size:16px;">\u21A2</span>' +
+            '</td></tr>';
     // Close
     ret += '</table>';
 
 
-    return "<div style='width: 220px; white-space:normal;'>" + ret + "</div>";
+    return "<div style='width: 250px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
@@ -137,7 +150,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
         },
 
         title: {
-            text: "Wave Data",//this.getTitle(),
+            text: "Wave Data",
             align: 'left'
         },
 
@@ -288,7 +301,7 @@ Wavegram.prototype.getWindChartOptions = function () {
         },
 
         title: {
-            text: "Wind Data",//this.getTitle(),
+            text: "Wind Data",
             align: 'left'
         },
 
@@ -510,7 +523,7 @@ Wavegram.prototype.drawWindArrows = function (chart) {
         arrow = chart.renderer.path(
                 wavegram.windArrow(true)
             ).attr({
-                rotation: parseInt(wavegram.windDirection[i], 10),
+                rotation: -parseInt(wavegram.windDirection[i], 10)-90,
                 translateX: x, // rotation center
                 translateY: y // rotation center
             });
@@ -539,7 +552,7 @@ Wavegram.prototype.drawWaveArrows = function (chart) {
         arrow = chart.renderer.path(
                 wavegram.windArrow(false)
             ).attr({
-                rotation: parseInt(wavegram.waveDirection[i], 10),
+                rotation: -parseInt(wavegram.waveDirection[i], 10)-90,
                 translateX: x, // rotation center
                 translateY: y // rotation center
             });
@@ -586,13 +599,6 @@ Wavegram.prototype.drawBlocksForWindArrows = function (chart) {
             })
             .add();
     }
-};
-
-/**
- * Get the title based on the XML data
- */
-Wavegram.prototype.getTitle = function () {
-    return 'Meteogram for ' + this.xml.location.name + ', ' + this.xml.location.country;
 };
 
 /**
