@@ -79,8 +79,6 @@ Wavegram.prototype.parseWaveData = function () {
         }
     });
 
-    //console.log(wgram.windSpeed);
-
     // Create the chart when the data is loaded
     this.createWaveChart();
     this.createWindChart();
@@ -155,14 +153,6 @@ Wavegram.prototype.getWaveChartOptions = function () {
             text: "Wave Data",
             align: 'left'
         },
-
-        /*credits: {
-            text: 'Forecast from <a href="http://yr.no">yr.no</a>',
-            href: "google.com",//this.xml.credit.link['@attributes'].url,
-            position: {
-                x: -40
-            }
-        },*/
 
         tooltip: {
             shared: true,
@@ -307,14 +297,6 @@ Wavegram.prototype.getWindChartOptions = function () {
             align: 'left'
         },
 
-        /*credits: {
-            text: 'Forecast from <a href="http://yr.no">yr.no</a>',
-            href: "google.com",//this.xml.credit.link['@attributes'].url,
-            position: {
-                x: -40
-            }
-        },*/
-
         tooltip: {
             shared: true,
             useHTML: true,
@@ -363,9 +345,6 @@ Wavegram.prototype.getWindChartOptions = function () {
         yAxis: [{ // Wave Height axis
             title: {
                 text: "Wind Speed (Knots)",
-                //offset: 0,
-                //align: 'high',
-                //rotation: 0,
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[1]
@@ -602,6 +581,123 @@ Wavegram.prototype.drawBlocksForWindArrows = function (chart) {
             .add();
     }
 };
+
+
+// Dummy object so we can reuse our canvas-tools.js without errors
+Highcharts.CanVGRenderer = {};
+
+/**
+ * Add a new method to the Chart object to invoice a local download
+ */
+Highcharts.Chart.prototype.exportChartLocal = function (options) {
+
+    var chart = this,
+        svg = this.getSVG(), // Get the SVG
+        canvas,
+        a,
+        href,
+        extension,
+        download = function () {
+
+            var blob;
+
+            // IE specific
+            if (navigator.msSaveOrOpenBlob) { 
+
+                // Get PNG blob
+                if (extension === 'png') {
+                    blob = canvas.msToBlob();
+
+                // Get SVG blob
+                } else {
+                    blob = new MSBlobBuilder;
+                    blob.append(svg);
+                    blob = blob.getBlob('image/svg+xml');
+                }
+
+                navigator.msSaveOrOpenBlob(blob, 'chart.' + extension);
+
+            // HTML5 download attribute
+            } else {
+                a = document.createElement('a');
+                a.href = href;
+                a.download = 'chart.' + extension;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            }
+        },
+        prepareCanvas = function () {
+            canvas = document.createElement('canvas'); // Create an empty canvas
+            window.canvg(canvas, svg); // Render the SVG on the canvas
+
+            href = canvas.toDataURL('image/png');
+            extension = 'png';
+        };
+
+    // Add an anchor and apply the download to the button
+    if (options && options.type === 'image/svg+xml') {
+        href = 'data:' + options.type + ',' + svg;
+        extension = 'svg';
+        download();
+
+    } else {
+
+        // It's included in the page or preloaded, go ahead
+        if (window.canvg) {
+            prepareCanvas();
+            download();
+
+        // We need to load canvg before continuing
+        } else {
+            this.showLoading();
+            getScript(Highcharts.getOptions().global.canvasToolsURL, function () {
+                chart.hideLoading();
+                prepareCanvas();
+                download();
+            });
+        }
+    }
+};
+
+
+// Extend the default options to use the local exporter logic
+Highcharts.getOptions().exporting.buttons.contextButton.menuItems = [{
+    textKey: 'printChart',
+    onclick: function () {
+        this.print();
+    }
+}, {
+    separator: true
+}, {
+    textKey: 'downloadPNG',
+    onclick: function () {
+        this.exportChartLocal();
+    }
+}, {
+    textKey: 'downloadSVG',
+    onclick: function () {
+        this.exportChartLocal({
+            type: 'image/svg+xml'
+        });
+    }
+}];
+
+/**
+* Downloads a script and executes a callback when done.
+* @param {String} scriptLocation
+* @param {Function} callback
+*/
+function getScript(scriptLocation, callback) {
+    var head = document.getElementsByTagName('head')[0],
+        script = document.createElement('script');
+
+    script.type = 'text/javascript';
+    script.src = scriptLocation;
+    script.onload = callback;
+
+    head.appendChild(script);
+}
 
 /**
  * jQuery - On DOM Ready.
