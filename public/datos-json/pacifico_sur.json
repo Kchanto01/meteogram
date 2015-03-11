@@ -1,0 +1,222 @@
+[
+    {
+        "Time": "2015-01-20 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7380000948905945",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(194.90199279785156)",
+        "Direction_of_wind_waves_surface": "(207.5780029296875)",
+        "Primary_wave_direction_surface": "(271.9259948730469)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.7540011405944824",
+        "Wind_direction_from_which_blowing_surface": "(259.302001953125)"
+    },
+    {
+        "Time": "2015-01-20 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7160000801086426",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(296.12200927734375)",
+        "Direction_of_wind_waves_surface": "(208.99200439453125)",
+        "Primary_wave_direction_surface": "(264.552001953125)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "1.0440008640289307",
+        "Wind_direction_from_which_blowing_surface": "(289.3419494628906)"
+    },
+    {
+        "Time": "2015-01-20 12:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7039999961853027",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(295.94000244140625)",
+        "Direction_of_wind_waves_surface": "(210.41000366210938)",
+        "Primary_wave_direction_surface": "(255.9140167236328)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.6399998664855957",
+        "Wind_direction_from_which_blowing_surface": "(197.82598876953125)"
+    },
+    {
+        "Time": "2015-01-20 18:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7200000882148743",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(297.33001708984375)",
+        "Direction_of_wind_waves_surface": "(213.64801025390625)",
+        "Primary_wave_direction_surface": "(244.20401000976562)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "4.136001110076904",
+        "Wind_direction_from_which_blowing_surface": "(244.04600524902344)"
+    },
+    {
+        "Time": "2015-01-21 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7080000638961792",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(230.25396728515625)",
+        "Direction_of_wind_waves_surface": "(216.989990234375)",
+        "Primary_wave_direction_surface": "(245.31600952148438)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.770000696182251",
+        "Wind_direction_from_which_blowing_surface": "(291.1499938964844)"
+    },
+    {
+        "Time": "2015-01-21 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7100000381469727",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(192.50999450683594)",
+        "Direction_of_wind_waves_surface": "(219.67401123046875)",
+        "Primary_wave_direction_surface": "(236.7760009765625)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.7960002422332764",
+        "Wind_direction_from_which_blowing_surface": "(321.5359802246094)"
+    },
+    {
+        "Time": "2015-01-21 12:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.718000054359436",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(206.22198486328125)",
+        "Direction_of_wind_waves_surface": "(220.10400390625)",
+        "Primary_wave_direction_surface": "(232.24200439453125)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "1.931999921798706",
+        "Wind_direction_from_which_blowing_surface": "(262.3059997558594)"
+    },
+    {
+        "Time": "2015-01-21 18:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7320000529289246",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(189.7139892578125)",
+        "Direction_of_wind_waves_surface": "(221.9820098876953)",
+        "Primary_wave_direction_surface": "(231.85601806640625)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "3.6200008392333984",
+        "Wind_direction_from_which_blowing_surface": "(265.4839782714844)"
+    },
+    {
+        "Time": "2015-01-22 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7640001177787781",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(211.50399780273438)",
+        "Direction_of_wind_waves_surface": "(220.64401245117188)",
+        "Primary_wave_direction_surface": "(231.48599243164062)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.6100006103515625",
+        "Wind_direction_from_which_blowing_surface": "(290.5639953613281)"
+    },
+    {
+        "Time": "2015-01-22 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8160001039505005",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(209.04798889160156)",
+        "Direction_of_wind_waves_surface": "(215.8280029296875)",
+        "Primary_wave_direction_surface": "(227.24398803710938)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.8640003204345703",
+        "Wind_direction_from_which_blowing_surface": "(335.8699951171875)"
+    },
+    {
+        "Time": "2015-01-22 12:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8840001225471497",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(207.79600524902344)",
+        "Direction_of_wind_waves_surface": "(209.38999938964844)",
+        "Primary_wave_direction_surface": "(223.58999633789062)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "0.7680000066757202",
+        "Wind_direction_from_which_blowing_surface": "(243.61976623535156)"
+    },
+    {
+        "Time": "2015-01-22 18:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.9340001344680786",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(210.0659942626953)",
+        "Direction_of_wind_waves_surface": "(206.56399536132812)",
+        "Primary_wave_direction_surface": "(225.42401123046875)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.3540008068084717",
+        "Wind_direction_from_which_blowing_surface": "(220.79598999023438)"
+    },
+    {
+        "Time": "2015-01-23 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.9340001344680786",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(294.8740234375)",
+        "Direction_of_wind_waves_surface": "(207.94000244140625)",
+        "Primary_wave_direction_surface": "(226.87802124023438)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.164000988006592",
+        "Wind_direction_from_which_blowing_surface": "(281.906005859375)"
+    },
+    {
+        "Time": "2015-01-23 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.9140000343322754",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(294.9540100097656)",
+        "Direction_of_wind_waves_surface": "(211.552001953125)",
+        "Primary_wave_direction_surface": "(236.76800537109375)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.328000068664551",
+        "Wind_direction_from_which_blowing_surface": "(328.30596923828125)"
+    },
+    {
+        "Time": "2015-01-23 12:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8920000791549683",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(295.0419921875)",
+        "Direction_of_wind_waves_surface": "(214.58399963378906)",
+        "Primary_wave_direction_surface": "(226.5880126953125)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.0400004386901855",
+        "Wind_direction_from_which_blowing_surface": "(274.6600036621094)"
+    },
+    {
+        "Time": "2015-01-23 18:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8820000886917114",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(229.00006103515625)",
+        "Direction_of_wind_waves_surface": "(217.8300018310547)",
+        "Primary_wave_direction_surface": "(227.02601623535156)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "1.8860002756118774",
+        "Wind_direction_from_which_blowing_surface": "(264.1819763183594)"
+    },
+    {
+        "Time": "2015-01-24 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8520001173019409",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(275.15191650390625)",
+        "Direction_of_wind_waves_surface": "(221.40802001953125)",
+        "Primary_wave_direction_surface": "(233.33999633789062)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "1.5620006322860718",
+        "Wind_direction_from_which_blowing_surface": "(295.71197509765625)"
+    },
+    {
+        "Time": "2015-01-24 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.8220000863075256",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(275.34393310546875)",
+        "Direction_of_wind_waves_surface": "(224.7580108642578)",
+        "Primary_wave_direction_surface": "(246.40200805664062)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "1.3919997215270996",
+        "Wind_direction_from_which_blowing_surface": "(359.10198974609375)"
+    },
+    {
+        "Time": "2015-01-24 12:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7920000553131104",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(279.13995361328125)",
+        "Direction_of_wind_waves_surface": "(227.36001586914062)",
+        "Primary_wave_direction_surface": "(229.60000610351562)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.4760003089904785",
+        "Wind_direction_from_which_blowing_surface": "(263.8919982910156)"
+    },
+    {
+        "Time": "2015-01-24 18:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7740001082420349",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(279.41192626953125)",
+        "Direction_of_wind_waves_surface": "(229.13201904296875)",
+        "Primary_wave_direction_surface": "(231.36199951171875)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "2.388000726699829",
+        "Wind_direction_from_which_blowing_surface": "(260.5740051269531)"
+    },
+    {
+        "Time": "2015-01-25 00:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.752000093460083",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(279.46392822265625)",
+        "Direction_of_wind_waves_surface": "(228.03599548339844)",
+        "Primary_wave_direction_surface": "(235.26199340820312)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "0.8880009055137634",
+        "Wind_direction_from_which_blowing_surface": "(273.54595947265625)"
+    },
+    {
+        "Time": "2015-01-25 06:00:00 CST",
+        "Significant_height_of_combined_wind_waves_and_swell_surface": "0.7340000867843628",
+        "Direction_of_swell_waves_ordered_sequence_of_data": "(225.39007568359375)",
+        "Direction_of_wind_waves_surface": "(226.31600952148438)",
+        "Primary_wave_direction_surface": "(243.9840087890625)",
+        "Secondary_wave_direction_surface": "(missing)",
+        "Wind_speed_surface": "0.8579995632171631",
+        "Wind_direction_from_which_blowing_surface": "(87.7481689453125)"
+    }
+]
