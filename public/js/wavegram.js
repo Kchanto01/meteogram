@@ -1,3 +1,5 @@
+var unificado = false;
+
 /*
  * Wavegram prototype to plot.
  *
@@ -7,6 +9,7 @@ function Wavegram(wData, container, container2) {
     this.waveDirection = [];
     this.maxWaveHeight = [];
     this.windSpeed = [];
+    this.maxWindSpeed = [];
     this.windDirection = [];
 
     // Initialize
@@ -15,12 +18,105 @@ function Wavegram(wData, container, container2) {
     this.windContainer = container2;
 
     this.colors = [
-        Highcharts.getOptions().colors[2],
-        Highcharts.getOptions().colors[5]
+        Highcharts.getOptions().colors[0],
+        Highcharts.getOptions().colors[6]
     ];
 
     // Run
     this.parseWaveData();
+}
+
+function parse1Decimal (hilera) {
+    var i=0;
+    while(hilera[i]!='.' && i<hilera.length) {
+        i++
+    }
+
+    if(i+2<hilera.length) {
+        hilera=hilera.substring(0,i+2);
+    }
+
+    return hilera;
+}
+
+function getPuntoCardinal (grados) {
+
+    var resultado = "";
+    if( 348.76 <= grados || grados <= 11.25 ) {
+        resultado = "Norte";
+    } else if( 11.26 <= grados && grados <= 33.75 ) {
+        resultado = "Norte Noreste";
+    } else if( 33.76 <= grados && grados <= 56.25 ) {
+        resultado = "Noreste";
+    } else if( 56.26 <= grados && grados <= 78.75 ) {
+        resultado = "Este Noreste";
+    } else if( 78.76 <= grados && grados <= 101.25 ) {
+        resultado = "Este";
+    } else if( 101.26 <= grados && grados <=  123.75) {
+        resultado = "Este Sureste";
+    } else if( 123.76 <= grados && grados <= 145.25 ) {
+        resultado = "Sureste";
+    } else if( 145.26 <= grados && grados <= 168.75 ) {
+        resultado = "Sur Sureste";
+    } else if( 168.76 <= grados && grados <= 191.25 ) {
+        resultado = "Sur";
+    } else if( 191.26 <= grados && grados <= 213.75 ) {
+        resultado = "Sur Suroeste";
+    } else if( 213.76 <= grados && grados <= 236.25 ) {
+        resultado = "Suroeste";
+    } else if( 236.26 <= grados && grados <= 258.75 ) {
+        resultado = "Oeste Suroeste";
+    } else if( 258.76 <= grados && grados <= 281.25 ) {
+        resultado = "Oeste";
+    } else if( 281.26 <= grados && grados <= 303.75 ) {
+        resultado = "Oeste Noroeste";
+    } else if( 303.76 <= grados && grados <= 326.25 ) {
+        resultado = "Noroeste";
+    } else if( 326.26 <= grados && grados <= 348.75 ) {
+        resultado = "Norte Noroeste";
+    }
+
+    return resultado;
+}
+
+function getSimboloCardinal (grados) {
+
+    var resultado = "";
+    if( 348.76 <= grados || grados <= 11.25 ) {
+        resultado = "N";
+    } else if( 11.26 <= grados && grados <= 33.75 ) {
+        resultado = "NNE";
+    } else if( 33.76 <= grados && grados <= 56.25 ) {
+        resultado = "NE";
+    } else if( 56.26 <= grados && grados <= 78.75 ) {
+        resultado = "ENE";
+    } else if( 78.76 <= grados && grados <= 101.25 ) {
+        resultado = "E";
+    } else if( 101.26 <= grados && grados <=  123.75) {
+        resultado = "ESE";
+    } else if( 123.76 <= grados && grados <= 145.25 ) {
+        resultado = "SE";
+    } else if( 145.26 <= grados && grados <= 168.75 ) {
+        resultado = "SSE";
+    } else if( 168.76 <= grados && grados <= 191.25 ) {
+        resultado = "S";
+    } else if( 191.26 <= grados && grados <= 213.75 ) {
+        resultado = "SSW";
+    } else if( 213.76 <= grados && grados <= 236.25 ) {
+        resultado = "SW";
+    } else if( 236.26 <= grados && grados <= 258.75 ) {
+        resultado = "WSW";
+    } else if( 258.76 <= grados && grados <= 281.25 ) {
+        resultado = "W";
+    } else if( 281.26 <= grados && grados <= 303.75 ) {
+        resultado = "WNW";
+    } else if( 303.76 <= grados && grados <= 326.25 ) {
+        resultado = "NW";
+    } else if( 326.26 <= grados && grados <= 348.75 ) {
+        resultado = "NNW";
+    }
+
+    return resultado;
 }
 
 /**
@@ -49,7 +145,7 @@ Wavegram.prototype.parseWaveData = function () {
         var from = Date.parse( obj['Time'].replace(/-/g, "/") ) - (6 * 36e5),//Date.parse( new Date(fecha[0], fecha[1]-1, fecha[2], hora, 0, 0) ),
             to = from + (6 * 36e5);//Date.parse( new Date(fecha[0], fecha[1], fecha[2], hora, 0, 0) ) + (6 * 36e5);
 
-        if (to > pointStart + 4 * 24 * 36e5) {
+        if (to > pointStart + 7 * 24 * 36e5) {
             return;
         }
 
@@ -69,6 +165,10 @@ Wavegram.prototype.parseWaveData = function () {
         wgram.windSpeed.push({
             x: from,
             y: parseFloat( obj['Wind_speed_surface'] )
+        });
+        wgram.maxWindSpeed.push({
+            x: from,
+            y: (parseFloat( obj['Wind_speed_surface'] ) * 1.5 )
         });
 
         tmp = obj['Wind_direction_from_which_blowing_surface'];
@@ -102,34 +202,116 @@ Wavegram.prototype.tooltipFormatter = function (tooltip) {
     ret += '<table>';
 
     var hilera = "" + wgram.maxWaveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Max Wave Height' +
-            ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Altura máxima' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
 
     hilera = "" + wgram.waveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Average Wave Height' +
-            ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Altura significativa' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
 
     hilera = "" + wgram.waveDirection[index];
-    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Wave Direction: ' +
-            '</td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>5)?5:hilera.length) +
-            '\u00B0' + '</td></tr>';
+    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Dirección ola: ' +
+            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
+
+    hilera = "" + wgram.maxWindSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Ráfaga' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';
 
     hilera = "" + wgram.windSpeed[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Average Wind Speed' +
-            ': </td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>4)?4:hilera.length) +
-            ' knots' + '</td></tr>';
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'Viento promedio' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';
 
     hilera = "" + wgram.windDirection[index];
-    ret += '<tr><td><span style="color:#000; font-size:16px;">\u21A2</span> ' + 'Wind Direction: ' +
-            '</td><td style="white-space:nowrap;">' + hilera.substring(0,(hilera.length>5)?5:hilera.length) +
-            '\u00B0' + '</td></tr>';
+    ret += '<tr><td><span style="color:#000; font-size:16px;">\u2190</span> ' + 'Dirección viento: ' +
+            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
     // Close
     ret += '</table>';
 
 
-    return "<div style='width: 280px; white-space:normal;'>" + ret + "</div>";
+    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
+};
+
+/**
+ * Callback function that is called from Highcharts on hovering each point and returns
+ * HTML for the tooltip.
+ */
+Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
+
+    var wgram = this;
+
+    // Create the header with reference to the time interval
+    var index = tooltip.points[0].point.index,
+        ret = '<small>' + Highcharts.dateFormat('%A, %b %e, %H:%M', tooltip.x) + '</small><br>';
+
+    // Symbol text
+    //ret += '<b>' + this.symbolNames[index] + '</b>';
+
+    ret += '<table>';
+
+    var hilera = "" + wgram.maxWaveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Altura máxima' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            'm' + '</td></tr>';
+
+    hilera = "" + wgram.waveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Altura significativa' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            'm' + '</td></tr>';
+
+    hilera = "" + wgram.waveDirection[index];
+    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Dirección ola: ' +
+            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
+
+    // Close
+    ret += '</table>';
+
+
+    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
+};
+
+/**
+ * Callback function that is called from Highcharts on hovering each point and returns
+ * HTML for the tooltip.
+ */
+Wavegram.prototype.windTooltipFormatter = function (tooltip) {
+
+    var wgram = this;
+
+    // Create the header with reference to the time interval
+    var index = tooltip.points[0].point.index,
+        ret = '<small>' + Highcharts.dateFormat('%A, %b %e, %H:%M', tooltip.x) + '</small><br>';
+
+    // Symbol text
+    //ret += '<b>' + this.symbolNames[index] + '</b>';
+
+    ret += '<table>';
+
+    var hilera = "" + wgram.maxWindSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Ráfaga' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';
+
+    hilera = "" + wgram.windSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'Viento promedio' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';
+
+    hilera = "" + wgram.windDirection[index];
+    ret += '<tr><td><span style="color:#000; font-size:16px;">\u2190</span> ' + 'Dirección viento: ' +
+            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
+    // Close
+    ret += '</table>';
+
+
+    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
@@ -150,7 +332,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
         },
 
         title: {
-            text: "Wave Data",
+            text: "",
             align: 'left'
         },
 
@@ -161,8 +343,20 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 width: 100
             },
             formatter: function () {
-                return wavegram.tooltipFormatter(this);
+                if(unificado) {
+                    return wavegram.tooltipFormatter(this);
+                } else {
+                    return wavegram.waveTooltipFormatter(this);
+                }
             }
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x: -40,
+            y: 40
         },
 
         xAxis: [{ // Bottom X axis
@@ -174,11 +368,11 @@ Wavegram.prototype.getWaveChartOptions = function () {
             gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0',
             startOnTick: true,
             endOnTick: false,
-            minPadding: 0.035,
-            maxPadding: 0.035,
-            offset: 30,
-            showLastLabel: true,
-            showFirstLabel: false,
+            minPadding: 0,//.035,
+            maxPadding: 0,//.035,
+            offset: 31,
+            showLastLabel: false,
+            showFirstLabel: true,
             labels: {
                 format: '{value:<span style="font-size:8px">%H:00</span>}'
             }
@@ -201,7 +395,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Wave Height",
+                text: "Alturas de ola",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[0]
@@ -228,13 +422,8 @@ Wavegram.prototype.getWaveChartOptions = function () {
 
         }],
 
-        legend: {
-            enabled: false
-        },
-
-
         series: [{
-            name: 'Max Wave Height',
+            name: 'Altura máxima de ola',
             data: this.maxWaveHeight,
             type: 'spline',
             dashStyle: 'shortdot',
@@ -253,7 +442,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
             color: wavegram.colors[0],
             yAxis: 0
         }, {
-            name: 'Wave Height',
+            name: 'Altura ola',
             data: this.waveHeight,
             type: 'spline',
             marker: {
@@ -293,7 +482,7 @@ Wavegram.prototype.getWindChartOptions = function () {
         },
 
         title: {
-            text: "Wind Data",
+            text: "",
             align: 'left'
         },
 
@@ -304,8 +493,20 @@ Wavegram.prototype.getWindChartOptions = function () {
                 width: 100
             },
             formatter: function () {
-                return wavegram.tooltipFormatter(this);
+                if(unificado) {
+                    return wavegram.tooltipFormatter(this);
+                } else {
+                    return wavegram.windTooltipFormatter(this);
+                }
             }
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x: -40,
+            y: 40
         },
 
         xAxis: [{ // Bottom X axis
@@ -317,11 +518,11 @@ Wavegram.prototype.getWindChartOptions = function () {
             gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0',
             startOnTick: true,
             endOnTick: false,
-            minPadding: 0.035,
-            maxPadding: 0.035,
+            minPadding: 0,//.035,
+            maxPadding: 0,//.035,
             offset: 30,
-            showLastLabel: true,
-            showFirstLabel: false,
+            showLastLabel: false,
+            showFirstLabel: true,
             labels: {
                 format: '{value:<span style="font-size:8px">%H:00</span>}'
             }
@@ -344,14 +545,14 @@ Wavegram.prototype.getWindChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Wind Speed (Knots)",
+                text: "Velocidades de viento",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[1]
                 }
             },
             labels: {
-                format: '{value}kt',
+                format: '{value} km/h',
                 style: {
                     fontSize: '10px',
                     color: wavegram.colors[1]
@@ -372,21 +573,33 @@ Wavegram.prototype.getWindChartOptions = function () {
 
         }],
 
-        legend: {
-            enabled: false
-        },
-
 
         series: [{
-            name: 'Wind Speed',
+            name: 'Ráfaga',
             color: wavegram.colors[1],
-            data: this.windSpeed,
+            data: this.maxWindSpeed,
+            type: 'spline',
+            dashStyle: 'shortdot',
             marker: {
                 enabled: false
             },
             shadow: false,
             tooltip: {
-                valueSuffix: 'kt'
+                valueSuffix: 'km/h'
+            },
+            //dashStyle: 'shortdot',
+            yAxis: 0
+        }, {
+            name: 'Viento promedio',
+            color: wavegram.colors[1],
+            data: this.windSpeed,
+            type: 'spline',
+            marker: {
+                enabled: false
+            },
+            shadow: false,
+            tooltip: {
+                valueSuffix: 'km/h'
             },
             //dashStyle: 'shortdot',
             yAxis: 0
@@ -450,7 +663,8 @@ Wavegram.prototype.windArrow = function (conPalitos) {
         0, -10 // top
     ];
 
-    if(conPalitos) {
+
+    /*if(conPalitos) {
         level = $.inArray(name, ['Calm', 'Light air', 'Light breeze', 'Gentle breeze', 'Moderate breeze',
         'Fresh breeze', 'Strong breeze', 'Near gale', 'Gale', 'Strong gale', 'Storm',
         'Violent storm', 'Hurricane']);
@@ -484,7 +698,7 @@ Wavegram.prototype.windArrow = function (conPalitos) {
         } else if (level >= 8) {
             path.push('M', 0, -1, 'L', 7, -1);
         }
-    }
+    }*/
 
     return path;
 };
@@ -499,22 +713,26 @@ Wavegram.prototype.drawWindArrows = function (chart) {
         var sprite, arrow, x, y;
 
         // Draw the wind arrows
-        x = point.plotX + chart.plotLeft;
+        //console.log("a: " + point.plotX + ", b: " + chart.plotLeft);
+        x = point.plotX + chart.plotLeft+15.5;
         y = 255;
-        arrow = chart.renderer.path(
-                wavegram.windArrow(true)
-            ).attr({
-                rotation: -parseInt(wavegram.windDirection[i], 10)-90,
-                translateX: x, // rotation center
-                translateY: y // rotation center
-            });
 
-        arrow.attr({
-                stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                'stroke-width': 1.5,
-                zIndex: 5
-            })
-            .add();
+        if(i!=chart.series[0].data.length-1) {
+            arrow = chart.renderer.path(
+                    wavegram.windArrow(true)
+                ).attr({
+                    rotation: (180+parseInt(wavegram.windDirection[i], 10)),
+                    translateX: x, // rotation center
+                    translateY: y // rotation center
+                });
+
+            arrow.attr({
+                    stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    'stroke-width': 1.5,
+                    zIndex: 5
+                })
+                .add();
+        }
     });
 };
 
@@ -528,22 +746,25 @@ Wavegram.prototype.drawWaveArrows = function (chart) {
         var sprite, arrow, x, y;
 
         // Draw the wind arrows
-        x = point.plotX + chart.plotLeft;
+        x = point.plotX + chart.plotLeft+15.5;
         y = 255;
-        arrow = chart.renderer.path(
-                wavegram.windArrow(false)
-            ).attr({
-                rotation: -parseInt(wavegram.waveDirection[i], 10)-90,
-                translateX: x, // rotation center
-                translateY: y // rotation center
-            });
 
-        arrow.attr({
-                stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                'stroke-width': 1.5,
-                zIndex: 5
-            })
-            .add();
+        if(i!=chart.series[0].data.length-1) {
+            arrow = chart.renderer.path(
+                    wavegram.windArrow(false)
+                ).attr({
+                    rotation: 180+parseInt(wavegram.waveDirection[i], 10),
+                    translateX: x, // rotation center
+                    translateY: y // rotation center
+                });
+
+            arrow.attr({
+                    stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    'stroke-width': 1.5,
+                    zIndex: 5
+                })
+                .add();
+        }
     });
 };
 
@@ -563,7 +784,7 @@ Wavegram.prototype.drawBlocksForWindArrows = function (chart) {
 
         // Get the X position
         isLast = pos === max + 36e5;
-        x = Math.round(xAxis.toPixels(pos)) + (isLast ? 0.5 : -0.5)+20;
+        x = Math.round(xAxis.toPixels(pos)) + (isLast ? 0.5 : -0.5)//+20;
 
         // Draw the vertical dividers and ticks
         if (this.resolution > 36e5) {
@@ -710,7 +931,7 @@ $(function() {
 
 
     $.getJSON(
-        './datos-json/' + archivos[0] + '.json',
+        './datos-json/' + archivos[2] + '.json',
         function (wData) {
             var wavegram = new Wavegram(wData, 'container', 'container2');
         }
