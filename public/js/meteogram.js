@@ -459,8 +459,8 @@ Meteogram.prototype.getChartOptions = function () {
 
         xAxis: [{ // Bottom X axis
             type: 'datetime',
-            tickInterval: 2 * 36e5, // two hours
-            minorTickInterval: 36e5, // one hour
+            //tickInterval: 2 * 36e5, // two hours
+            //minorTickInterval: 36e5, // one hour
             tickLength: 0,
             gridLineWidth: 1,
             gridLineColor: (Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0',
