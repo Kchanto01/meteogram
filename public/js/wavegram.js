@@ -1,5 +1,3 @@
-var unificado = false;
-
 /*
  * Wavegram prototype to plot.
  *
@@ -430,11 +428,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 width: 100
             },
             formatter: function () {
-                if(unificado) {
-                    return wavegram.tooltipFormatter(this);
-                } else {
-                    return wavegram.waveTooltipFormatter(this);
-                }
+                return wavegram.waveTooltipFormatter(this);
             }
         },
 
@@ -586,11 +580,7 @@ Wavegram.prototype.getWindChartOptions = function () {
                 width: 100
             },
             formatter: function () {
-                if(unificado) {
-                    return wavegram.tooltipFormatter(this);
-                } else {
-                    return wavegram.windTooltipFormatter(this);
-                }
+                return wavegram.windTooltipFormatter(this);
             }
         },
 
