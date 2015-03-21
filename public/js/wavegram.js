@@ -1,4 +1,4 @@
-var unificado = true;
+var unificado = false;
 
 /*
  * Wavegram prototype to plot.
@@ -329,19 +329,28 @@ Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
 
     ret += '<table>';
 
-    var hilera = "" + wgram.maxWaveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Altura máxima' +
+    var littleStr = "sig";
+    littleStr = littleStr.fontsize(1);
+
+    var hilera = "" + wgram.waveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'H' + littleStr +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
 
-    hilera = "" + wgram.waveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Altura promedio' +
+    littleStr = 'sig';
+    littleStr = littleStr.fontsize(1);
+
+    hilera = "" + wgram.maxWaveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'H' + littleStr +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
+
+    littleStr = 'H';
+    littleStr = littleStr.fontsize(1);
 
     hilera = "" + wgram.waveDirection[index];
-    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Dirección: ' +
-            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'O' + littleStr +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
 
     // Close
@@ -368,19 +377,22 @@ Wavegram.prototype.windTooltipFormatter = function (tooltip) {
 
     ret += '<table>';
 
-    var hilera = "" + wgram.maxWindSpeed[index].y;
+    var hilera = "" + wgram.windSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'V' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';
+
+    hilera = "" + wgram.maxWindSpeed[index].y;
     ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Ráfaga' +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             ' km/h' + '</td></tr>';
 
-    hilera = "" + wgram.windSpeed[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'Viento promedio' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            ' km/h' + '</td></tr>';
+    var littleStr = "w";
+    littleStr = littleStr.fontsize(1);
 
     hilera = "" + wgram.windDirection[index];
-    ret += '<tr><td><span style="color:#000; font-size:16px;">\u2190</span> ' + 'Dirección viento: ' +
-            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+    ret += '<tr><td><span style="color:#000; font-size:16px;">\u2190</span> ' + 'O' + littleStr +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
     // Close
     ret += '</table>';
