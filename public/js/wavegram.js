@@ -225,27 +225,31 @@ Wavegram.prototype.parseWaveData = function () {
         var cNum = 
         wgram.waveHeight.push({
             x: from,
-            y: parseFloat( obj['Significant_height_of_combined_wind_waves_and_swell_surface'] )
+            y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/sig_wav_ht_surface'] ) // Hsig
         });
         wgram.maxWaveHeight.push({
             x: from,
-            y: (parseFloat( wgram.waveHeight[i]['y'] ) * 1.3),
+            y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/max_wav_ht_surface'] ) // Hmax
         });
 
-        var tmp = obj['Primary_wave_direction_surface'];
-        wgram.waveDirection.push( tmp.substring(1,tmp.length-1) );
+        wgram.waveDirection.push( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] ); // O_h
+
+        var u = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_ucmp_height_above_ground'] );
+        var v = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_vcmp_height_above_ground'] );
+
+        var rootTmp = Math.sqrt( Math.pow(u,2) + Math.pow(v,2) );
 
         wgram.windSpeed.push({
             x: from,
-            y: parseFloat( obj['Wind_speed_surface'] )
-        });
-        wgram.maxWindSpeed.push({
-            x: from,
-            y: (parseFloat( obj['Wind_speed_surface'] ) * 1.5 )
+            y: rootTmp
         });
 
-        tmp = obj['Wind_direction_from_which_blowing_surface'];
-        wgram.windDirection.push( tmp.substring(1,tmp.length-1) );
+        wgram.maxWindSpeed.push({
+            x: from,
+            y: rootTmp * 1.5
+        });
+
+        wgram.windDirection.push( Math.atan( u / v) );
 
         if (i == 0) {
             pointStart = (from + to) / 2;
