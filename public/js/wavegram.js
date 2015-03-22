@@ -998,9 +998,10 @@ $(function() {
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
 
     $.getJSON(
-        './datos-json/' + archivos[0] + '.json',
+        './datos-csv/' + archivos[0] + '.csv',
         function (wData) {
-            var wavegram = new Wavegram(wData, 'container', 'container2');
+            var data = Papa.parse(wData, { header: true });
+            var wavegram = new Wavegram(data, 'container', 'container2');
         }
     );
 });
