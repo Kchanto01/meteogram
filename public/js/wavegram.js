@@ -998,10 +998,10 @@ function getScript(scriptLocation, callback) {
  */
 $(function() {
 
-    var archivos = ['b_salinas', 'isla_coco', 'limon', 'pacifico_sur',
+    var archivos = ['bahia-salinas', 'isla_coco', 'limon', 'P-sur',
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
 
-    $.getJSON(
+    $.get(
         './datos-csv/' + archivos[0] + '.csv',
         function (wData) {
             var data = Papa.parse(wData, { header: true });
