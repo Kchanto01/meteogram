@@ -476,7 +476,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Alturas de ola",
+                text: "Altura de ola",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[0]
@@ -628,7 +628,7 @@ Wavegram.prototype.getWindChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Velocidades de viento",
+                text: "Velocidad de viento",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[1]
@@ -998,9 +998,10 @@ $(function() {
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
 
     $.getJSON(
-        './datos-json/' + archivos[0] + '.json',
+        './datos-csv/' + archivos[0] + '.csv',
         function (wData) {
-            var wavegram = new Wavegram(wData, 'container', 'container2');
+            var data = Papa.parse(wData, { header: true });
+            var wavegram = new Wavegram(data, 'container', 'container2');
         }
     );
 });
