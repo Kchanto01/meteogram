@@ -208,7 +208,7 @@ Wavegram.prototype.parseWaveData = function () {
     // The returned xml variable is a JavaScript representation of the provided XML,
     // generated on the server by running PHP simple_load_xml and converting it to
     // JavaScript by json_encode.
-    $.each(waveData, function (i, obj) {
+    $.each(waveData.data, function (i, obj) {
         // Get the times - only Safari can't parse ISO8601 so we need to do some replacements
 
         var fecha=obj['Time'].split(" ")[0].split("-"),
@@ -1004,7 +1004,7 @@ $(function() {
     $.get(
         './datos-csv/' + archivos[0] + '.csv',
         function (wData) {
-            var data = Papa.parse(wData, { header: true });
+            var data = Papa.parse(wData, { header: true, skipEmptyLines: true });
             var wavegram = new Wavegram(data, 'container', 'container2');
         }
     );
