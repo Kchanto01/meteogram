@@ -335,7 +335,7 @@ Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
 
-    littleStr = 'sig';
+    littleStr = 'max';
     littleStr = littleStr.fontsize(1);
 
     hilera = "" + wgram.maxWaveHeight[index].y;
