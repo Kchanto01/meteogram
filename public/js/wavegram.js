@@ -476,7 +476,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Alturas de ola",
+                text: "Altura de ola",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[0]
@@ -628,7 +628,7 @@ Wavegram.prototype.getWindChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Velocidades de viento",
+                text: "Velocidad de viento",
                 style: {
                     fontSize: '12px',
                     color: wavegram.colors[1]
