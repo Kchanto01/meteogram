@@ -429,7 +429,8 @@ Wavegram.prototype.getWaveChartOptions = function () {
             shared: true,
             useHTML: true,
             style: {
-                width: 100
+                width: 100,
+                fontFamily:'Helvetica, sans-serif'
             },
             formatter: function () {
                 return wavegram.waveTooltipFormatter(this);
@@ -440,6 +441,9 @@ Wavegram.prototype.getWaveChartOptions = function () {
             align: 'right',
             verticalAlign: 'top',
             layout: 'vertical',
+            style: {
+                fontFamily:'Helvetica, sans-serif'   
+            },
             x: -40,
             y: 40
         },
@@ -459,14 +463,14 @@ Wavegram.prototype.getWaveChartOptions = function () {
             showLastLabel: false,
             showFirstLabel: true,
             labels: {
-                format: '{value:<span style="font-size:8px">%H:00</span>}'
+                format: '{value:<span style="font-size:8px;font-family:Helvetica, sans-serif;">%H:00</span>}'
             }
         }, { // Top X axis
             linkedTo: 0,
             type: 'datetime',
             tickInterval: 24 * 3600 * 1000,
             labels: {
-                format: '{value:<span style="font-size: 12px; font-weight: 600">%e/%m/%Y</span>}',//'{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+                format: '{value:<span style="font-size: 12px; font-weight: 600;font-family:Helvetica, sans-serif">%e/%m/%Y</span>}',//'{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
                 align: 'left',
                 x: 3,
                 y: -5
@@ -483,6 +487,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 text: "Altura de ola",
                 style: {
                     fontSize: '12px',
+                    fontFamily:'Helvetica, sans-serif',
                     color: wavegram.colors[0]
                 },
             },
@@ -490,6 +495,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 format: '{value}m',
                 style: {
                     fontSize: '10px',
+                    fontFamily:'Helvetica, sans-serif',
                     color: wavegram.colors[0]
                 },
                 x: -3
@@ -581,7 +587,8 @@ Wavegram.prototype.getWindChartOptions = function () {
             shared: true,
             useHTML: true,
             style: {
-                width: 100
+                width: 100,
+                fontFamily:'Helvetica, sans-serif'
             },
             formatter: function () {
                 return wavegram.windTooltipFormatter(this);
@@ -592,6 +599,9 @@ Wavegram.prototype.getWindChartOptions = function () {
             align: 'right',
             verticalAlign: 'top',
             layout: 'vertical',
+            style: {
+                fontFamily:'Helvetica, sans-serif'   
+            },
             x: -40,
             y: 40
         },
@@ -611,14 +621,14 @@ Wavegram.prototype.getWindChartOptions = function () {
             showLastLabel: false,
             showFirstLabel: true,
             labels: {
-                format: '{value:<span style="font-size:8px">%H:00</span>}'
+                format: '{value:<span style="font-size:8px;font-family:Helvetica, sans-serif;">%H:00</span>}'
             }
         }, { // Top X axis
             linkedTo: 0,
             type: 'datetime',
             tickInterval: 24 * 3600 * 1000,
             labels: {
-                format: '{value:<span style="font-size: 12px; font-weight: 600">%e/%m/%Y</span>}',//'{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+                format: '{value:<span style="font-size: 12px; font-weight: 600;font-family:Helvetica, sans-serif;">%e/%m/%Y</span>}',//'{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
                 align: 'left',
                 x: 3,
                 y: -5
@@ -635,6 +645,7 @@ Wavegram.prototype.getWindChartOptions = function () {
                 text: "Velocidad de viento",
                 style: {
                     fontSize: '12px',
+                    fontFamily:'Helvetica, sans-serif',
                     color: wavegram.colors[1]
                 }
             },
@@ -642,6 +653,7 @@ Wavegram.prototype.getWindChartOptions = function () {
                 format: '{value} km/h',
                 style: {
                     fontSize: '10px',
+                    fontFamily:'Helvetica, sans-serif',
                     color: wavegram.colors[1]
                 },
                 x: -3
