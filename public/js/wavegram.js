@@ -484,7 +484,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Altura de ola",
+                text: "Altura de ola (m)",
                 style: {
                     fontSize: '12px',
                     fontFamily:'Helvetica, sans-serif',
@@ -492,7 +492,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 },
             },
             labels: {
-                format: '{value}m',
+                format: '{value}',
                 style: {
                     fontSize: '10px',
                     fontFamily:'Helvetica, sans-serif',
@@ -642,7 +642,7 @@ Wavegram.prototype.getWindChartOptions = function () {
 
         yAxis: [{ // Wave Height axis
             title: {
-                text: "Velocidad de viento",
+                text: "Velocidad de viento (km/h)",
                 style: {
                     fontSize: '12px',
                     fontFamily:'Helvetica, sans-serif',
@@ -650,7 +650,7 @@ Wavegram.prototype.getWindChartOptions = function () {
                 }
             },
             labels: {
-                format: '{value} km/h',
+                format: '{value}',
                 style: {
                     fontSize: '10px',
                     fontFamily:'Helvetica, sans-serif',
@@ -1014,7 +1014,7 @@ $(function() {
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
 
     $.get(
-        './datos-csv/' + archivos[0] + '.csv',
+        './datos-csv/' + archivos[4] + '.csv',
         function (wData) {
             var data = Papa.parse(wData, { header: true, skipEmptyLines: true });
             var wavegram = new Wavegram(data, 'container', 'container2');
