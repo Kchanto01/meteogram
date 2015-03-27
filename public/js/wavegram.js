@@ -9,6 +9,7 @@ function Wavegram(wData, container, container2) {
     this.windSpeed = [];
     this.maxWindSpeed = [];
     this.windDirection = [];
+    this.periodo = [];
 
     // Initialize
     this.waveData = wData;
@@ -24,10 +25,11 @@ function Wavegram(wData, container, container2) {
     this.parseWaveData();
 }
 
-function parse1Decimal (hilera) {
+function parse1Decimal (str) {
+    var hilera = str.toString();
     var i=0;
-    while(hilera[i]!='.' && i<hilera.length) {
-        i++
+    while( hilera[i]!='.' && i<hilera.length) {
+        i++;
     }
 
     if(i+2<hilera.length) {
@@ -121,30 +123,6 @@ function replaceAll(find, replace, str) {
   return str.replace(new RegExp(find, 'g'), replace);
 }
 
-function rangoOla(val) {
-    if(val < 1) {
-        return 3;
-    } else if(val < 2) {
-        return 2;
-    } else if(val < 3) {
-        return 1;
-    } else {
-        return 0;   
-    }
-}
-
-function rangoViento(val) {
-    if(val < 22) {
-        return 3;
-    } else if(val < 30) {
-        return 2;
-    } else if(val < 40) {
-        return 1;
-    } else {
-        return 0;   
-    }
-}
-
 function getAllIndexes(arr, val) {
     var indexes = [], i;
     for(i = 0; i < arr.length; i++)
@@ -232,7 +210,9 @@ Wavegram.prototype.parseWaveData = function () {
             y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/max_wav_ht_surface'] ) // Hmax
         });
 
-        wgram.waveDirection.push( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] ) - 180 ); // O_h
+        //****************************MATH-ABS REVISAR****************************
+        wgram.waveDirection.push( Math.abs( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] ) - 180 ) ); // O_h
+        //****************************MATH-ABS REVISAR****************************
 
         var u = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_ucmp_height_above_ground'] );
         var v = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_vcmp_height_above_ground'] );
@@ -251,6 +231,8 @@ Wavegram.prototype.parseWaveData = function () {
 
         wgram.windDirection.push( Math.abs( Math.atan( u / v) - 90 ) );
 
+        wgram.periodo.push( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_per_surface'] ) );
+
         if (i == 0) {
             pointStart = (from + to) / 2;
         }
@@ -259,59 +241,6 @@ Wavegram.prototype.parseWaveData = function () {
     // Create the chart when the data is loaded
     this.createWaveChart();
     this.createWindChart();
-};
-
-/**
- * Callback function that is called from Highcharts on hovering each point and returns
- * HTML for the tooltip.
- */
-Wavegram.prototype.tooltipFormatter = function (tooltip) {
-
-    var wgram = this;
-
-    // Create the header with reference to the time interval
-    var index = tooltip.points[0].point.index,
-        ret = '<small>' + traducirFecha(Highcharts.dateFormat('%A, %b %e, %H:%M', (tooltip.x-(3*36e5)))) + ' - ' + Highcharts.dateFormat('%H:%M', (tooltip.x+(3*36e5))) + '</small><br>';
-
-    // Symbol text
-    //ret += '<b>' + this.symbolNames[index] + '</b>';
-
-    ret += '<table>';
-
-    var hilera = "" + wgram.maxWaveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'Altura máxima' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            'm' + '</td></tr>';
-
-    hilera = "" + wgram.waveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'Altura promedio' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            'm' + '</td></tr>';
-
-    hilera = "" + wgram.waveDirection[index];
-    ret += '<tr><td><span style="color:#000">\u2190</span>' + 'Dirección: ' +
-            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr> <tr><td></br></td></tr>';
-
-    hilera = "" + wgram.maxWindSpeed[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Ráfaga' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            ' km/h' + '</td></tr>';
-
-    hilera = "" + wgram.windSpeed[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'Viento promedio' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            ' km/h' + '</td></tr>';
-
-    hilera = "" + wgram.windDirection[index];
-    ret += '<tr><td><span style="color:#000; font-size:16px;">\u2190</span> ' + 'Dirección viento: ' +
-            '</td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
-    // Close
-    ret += '</table>';
-
-
-    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
@@ -350,16 +279,23 @@ Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
     littleStr = 'H';
     littleStr = littleStr.fontsize(1);
 
-    hilera = "" + wgram.waveDirection[index];
+    hilera = wgram.waveDirection[index];
     ret += '<tr><td><span style="color:#000">\u2190</span>' + 'O' + littleStr +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
+
+    littleStr = 'P';
+    littleStr = littleStr.fontsize(1);
+
+    hilera = "" + Math.floor(wgram.periodo[index]);
+    ret += '<tr><td><span style="font-weight:bold">\u2015</span> ' + 'T' + littleStr +
+            ': </td><td style="white-space:nowrap;">' + hilera + 's</td></tr>';
 
     // Close
     ret += '</table>';
 
 
-    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
+    return "<div style='width: 175px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
@@ -400,7 +336,7 @@ Wavegram.prototype.windTooltipFormatter = function (tooltip) {
     ret += '</table>';
 
 
-    return "<div style='width: 300px; white-space:normal;'>" + ret + "</div>";
+    return "<div style='width: 175px; white-space:normal;'>" + ret + "</div>";
 };
 
 /**
@@ -412,8 +348,9 @@ Wavegram.prototype.getWaveChartOptions = function () {
     return {
         chart: {
             renderTo: this.waveContainer,
-            marginBottom: 70,
+            marginBottom: 90,
             marginRight: 40,
+            paddingLeft: 20,
             marginTop: 50,
             plotBorderWidth: 1,
             width: 800,
@@ -459,7 +396,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
             endOnTick: false,
             minPadding: 0.015,
             maxPadding: 0.015,
-            offset: 31,
+            offset: 44,
             showLastLabel: false,
             showFirstLabel: true,
             labels: {
@@ -520,7 +457,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
         },
 
         series: [{
-            name: 'Altura máxima de ola',
+            name: 'Altura máxima',
             data: this.maxWaveHeight,
             type: 'spline',
             dashStyle: 'shortdot',
@@ -539,7 +476,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
             color: wavegram.colors[0],
             yAxis: 0
         }, {
-            name: 'Altura promedio ola',
+            name: 'Altura significativa',
             data: this.waveHeight,
             type: 'spline',
             marker: {
@@ -570,7 +507,7 @@ Wavegram.prototype.getWindChartOptions = function () {
     return {
         chart: {
             renderTo: this.windContainer,
-            marginBottom: 70,
+            marginBottom: 80,
             marginRight: 40,
             marginTop: 50,
             plotBorderWidth: 1,
@@ -712,7 +649,31 @@ Wavegram.prototype.getWindChartOptions = function () {
 Wavegram.prototype.onWaveChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawArrows(chart, true);
-    this.drawBlocksForWindArrows(chart);
+    this.drawBlocksForWindArrows(chart, true);
+
+    //Pintar la definición en el gráfico del periodo
+    chart.renderer.text(
+            "\u2015",
+            22,
+            255
+        ).attr({
+            zIndex: 5
+        }).css({
+            fontFamily: '"Courier New", Courier, monospace',
+            fontSize: 18,
+            fontWeight: 900
+        }).add();
+    chart.renderer.text(
+            "periodo",
+            8,
+            261
+        ).attr({
+            zIndex: 5
+        }).css({
+            fontFamily: '"Courier New", Courier, monospace',
+            fontSize: 9,
+            fontWeight: 400
+        }).add();
 };
 
 /**
@@ -721,7 +682,7 @@ Wavegram.prototype.onWaveChartLoad = function (chart) {
 Wavegram.prototype.onWindChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawArrows(chart, false);
-    this.drawBlocksForWindArrows(chart);
+    this.drawBlocksForWindArrows(chart, false);
 };
 
 /**
@@ -762,43 +723,6 @@ Wavegram.prototype.windArrow = function (conPalitos) {
         0, -10 // top
     ];
 
-
-    /*if(conPalitos) {
-        level = $.inArray(name, ['Calm', 'Light air', 'Light breeze', 'Gentle breeze', 'Moderate breeze',
-        'Fresh breeze', 'Strong breeze', 'Near gale', 'Gale', 'Strong gale', 'Storm',
-        'Violent storm', 'Hurricane']);
-
-        level = 4;
-
-        if (level === 0) {
-            path = [];
-        }
-
-        if (level === 2) {
-            path.push('M', 0, -8, 'L', 4, -8); // short line
-        } else if (level >= 3) {
-            path.push(0, -10, 7, -10); // long line
-        }
-
-        if (level === 4) {
-            path.push('M', 0, -7, 'L', 4, -7);
-        } else if (level >= 5) {
-            path.push('M', 0, -7, 'L', 7, -7);
-        }
-
-        if (level === 5) {
-            path.push('M', 0, -4, 'L', 4, -4);
-        } else if (level >= 6) {
-            path.push('M', 0, -4, 'L', 7, -4);
-        }
-
-        if (level === 7) {
-            path.push('M', 0, -1, 'L', 4, -1);
-        } else if (level >= 8) {
-            path.push('M', 0, -1, 'L', 7, -1);
-        }
-    }*/
-
     return path;
 };
 
@@ -813,17 +737,18 @@ Wavegram.prototype.drawArrows = function (chart, esWave) {
 
         // Draw the wind arrows
         x = point.plotX + chart.plotLeft;//+15.5;
-        y = 242;
+        y = 232 - ((esWave)?10:0);
 
         arrow = chart.renderer.path(
                 wavegram.windArrow(false)
             ).attr({
-                rotation: 180+parseInt(wavegram.waveDirection[i], 10),
+                rotation: 180+parseInt((esWave)?wavegram.waveDirection[i]:wavegram.windDirection[i], 10),
                 translateX: x, // rotation center
                 translateY: y, // rotation center
                 resize: 2.8
             });
 
+        //simbolo dirercción viento/ola
         var hilera = getSimboloCardinal((esWave)?wavegram.waveDirection[i]:wavegram.windDirection[i]);
         var offset = 5;
         if (hilera.length==2) {
@@ -832,17 +757,33 @@ Wavegram.prototype.drawArrows = function (chart, esWave) {
             offset = 12;
         }
 
-        var simbolo = chart.renderer.text(
-                            hilera,
-                            x - offset,
-                            y+18
-                        ).attr({
-                            zIndex: 5
-                        }).css({
-                            fontFamily: '"Courier New", Courier, monospace',
-                            fontSize: 12,
-                            fontWeight: 500
-                        }).add();
+        chart.renderer.text(
+                hilera,
+                x - offset,
+                y+18
+            ).attr({
+                zIndex: 5
+            }).css({
+                fontFamily: '"Courier New", Courier, monospace',
+                fontSize: 12,
+                fontWeight: 500
+            }).add();
+
+        //periodo
+        if(esWave) {
+            hilera = Math.floor( wavegram.periodo[i] );
+            chart.renderer.text(
+                    hilera,
+                    x - 6,
+                    y+30
+                ).attr({
+                    zIndex: 5
+                }).css({
+                    fontFamily: '"Courier New", Courier, monospace',
+                    fontSize: 8,
+                    fontWeight: 900
+                }).add();
+        }
 
         arrow.attr({
                 stroke: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
@@ -856,7 +797,7 @@ Wavegram.prototype.drawArrows = function (chart, esWave) {
 /**
  * Draw blocks around wind arrows, below the plot area
  */
-Wavegram.prototype.drawBlocksForWindArrows = function (chart) {
+Wavegram.prototype.drawBlocksForWindArrows = function (chart, esWave) {
     var xAxis = chart.xAxis[0],
         x,
         pos,
@@ -879,7 +820,7 @@ Wavegram.prototype.drawBlocksForWindArrows = function (chart) {
         }
         isLong=true;
         chart.renderer.path(['M', x, chart.plotTop + chart.plotHeight + (isLong ? 0 : 28),
-            'L', x, chart.plotTop + chart.plotHeight + 32, 'Z'])
+            'L', x, chart.plotTop + chart.plotHeight + ((esWave)?45:32), 'Z'])
             .attr({
                 'stroke': chart.options.chart.plotBorderColor,
                 'stroke-width': 1
@@ -1010,11 +951,11 @@ function getScript(scriptLocation, callback) {
  */
 $(function() {
 
-    var archivos = ['bahia-salinas', 'isla_coco', 'limon', 'P-sur',
+    var archivos = ['bahia-salinas', 'I-coco', 'limon', 'P-sur',
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
 
     $.get(
-        './datos-csv/' + archivos[4] + '.csv',
+        './datos-csv/' + archivos[2] + '.csv',
         function (wData) {
             var data = Papa.parse(wData, { header: true, skipEmptyLines: true });
             var wavegram = new Wavegram(data, 'container', 'container2');
