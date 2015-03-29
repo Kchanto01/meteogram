@@ -217,7 +217,7 @@ Wavegram.prototype.parseWaveData = function () {
         var u = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_ucmp_height_above_ground'] );
         var v = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_vcmp_height_above_ground'] );
 
-        var rootTmp = Math.sqrt( Math.pow(u,2) + Math.pow(v,2) );
+        var rootTmp = Math.sqrt( Math.pow(u,2) + Math.pow(v,2) ) * 3.6;
 
         wgram.windSpeed.push({
             x: from,
@@ -226,7 +226,7 @@ Wavegram.prototype.parseWaveData = function () {
 
         wgram.maxWindSpeed.push({
             x: from,
-            y: rootTmp * 1.5
+            y: rootTmp * 1.3
         });
 
         wgram.windDirection.push( Math.abs( Math.atan( u / v) - 90 ) );
@@ -675,7 +675,7 @@ Wavegram.prototype.onWaveChartLoad = function (chart) {
             fontSize: 9,
             fontWeight: 400
         }).add();
-        chart.renderer.image('/img/side_img.png',400,49,39,206).add();
+        chart.renderer.image('/img/wavegram_side_img.png',750,49,39,206).add();
 };
 
 /**
@@ -685,7 +685,7 @@ Wavegram.prototype.onWindChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawArrows(chart, false);
     this.drawBlocksForWindArrows(chart, false);
-    chart.renderer.image('/img/side_img.png',750,49,39,206).add();
+    chart.renderer.image('/img/wavegram_side_img.png',750,49,39,206).add();
 };
 
 /**
@@ -947,6 +947,20 @@ function getScript(scriptLocation, callback) {
     script.onload = callback;
 
     head.appendChild(script);
+}
+
+/**
+* Initializes Highchart
+*/
+
+function initializeWavegram(fileURL){
+    $.get(
+        fileURL,
+        function (wData) {
+            var data = Papa.parse(wData, { header: true, skipEmptyLines: true });
+            var wavegram = new Wavegram(data, 'container', 'container2');
+        }
+    );
 }
 
 /**
