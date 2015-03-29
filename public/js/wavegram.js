@@ -349,7 +349,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
         chart: {
             renderTo: this.waveContainer,
             marginBottom: 90,
-            marginRight: 40,
+            marginRight: 50,
             paddingLeft: 20,
             marginTop: 50,
             plotBorderWidth: 1,
@@ -443,6 +443,7 @@ Wavegram.prototype.getWaveChartOptions = function () {
                 width: 1,
                 zIndex: 2
             }],
+
             maxPadding: 0.3,
             tickInterval: 1,
             gridLineWidth: 0,
@@ -508,7 +509,7 @@ Wavegram.prototype.getWindChartOptions = function () {
         chart: {
             renderTo: this.windContainer,
             marginBottom: 80,
-            marginRight: 40,
+            marginRight: 50,
             marginTop: 50,
             plotBorderWidth: 1,
             width: 800,
@@ -674,6 +675,7 @@ Wavegram.prototype.onWaveChartLoad = function (chart) {
             fontSize: 9,
             fontWeight: 400
         }).add();
+        chart.renderer.image('/img/side_img.png',400,49,39,206).add();
 };
 
 /**
@@ -683,6 +685,7 @@ Wavegram.prototype.onWindChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawArrows(chart, false);
     this.drawBlocksForWindArrows(chart, false);
+    chart.renderer.image('/img/side_img.png',750,49,39,206).add();
 };
 
 /**
