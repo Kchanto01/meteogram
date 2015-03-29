@@ -210,9 +210,7 @@ Wavegram.prototype.parseWaveData = function () {
             y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/max_wav_ht_surface'] ) // Hmax
         });
 
-        //****************************MATH-ABS REVISAR****************************
-        wgram.waveDirection.push( Math.abs( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] ) - 180 ) ); // O_h
-        //****************************MATH-ABS REVISAR****************************
+        wgram.waveDirection.push( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] - 180 ); // O_h
 
         var u = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_ucmp_height_above_ground'] );
         var v = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_vcmp_height_above_ground'] );
@@ -229,7 +227,7 @@ Wavegram.prototype.parseWaveData = function () {
             y: rootTmp * 1.3
         });
 
-        wgram.windDirection.push( Math.abs( Math.atan( u / v) - 90 ) );
+        wgram.windDirection.push( Math.abs(Math.atan2(v,u) * (180 / Math.PI) - 90) );
 
         wgram.periodo.push( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_per_surface'] ) );
 
