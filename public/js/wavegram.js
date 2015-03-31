@@ -227,7 +227,11 @@ Wavegram.prototype.parseWaveData = function () {
             y: rootTmp * 1.3
         });
 
-        wgram.windDirection.push( Math.abs(Math.atan2(v,u) * (180 / Math.PI) - 90) );
+        var az = arctan2(u,v) * (180 / Math.PI);
+        if( az < 0 ){
+            az = az + 360;
+        }
+        wgram.windDirection.push( az );
 
         wgram.periodo.push( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_per_surface'] ) );
 
