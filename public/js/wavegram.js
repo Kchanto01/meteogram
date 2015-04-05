@@ -677,7 +677,7 @@ Wavegram.prototype.onWaveChartLoad = function (chart) {
             fontSize: 9,
             fontWeight: 400
         }).add();
-        chart.renderer.image('/img/wavegram_side_img.png',750,49,39,206).add();
+        chart.renderer.image(themePath + '/img/wavegram_side_img.png',750,49,39,206).add();
 };
 
 /**
@@ -687,7 +687,7 @@ Wavegram.prototype.onWindChartLoad = function (chart) {
     //this.drawWeatherSymbols(chart);
     this.drawArrows(chart, false);
     this.drawBlocksForWindArrows(chart, false);
-    chart.renderer.image('/img/wavegram_side_img.png',750,49,39,206).add();
+    chart.renderer.image(themePath + '/img/wavegram_side_img.png',750,49,39,206).add();
 };
 
 /**
@@ -955,7 +955,10 @@ function getScript(scriptLocation, callback) {
 * Initializes Highchart
 */
 
-function initializeWavegram(fileURL){
+var themePath = '';
+
+function initializeWavegram(fileURL, themeURL){
+    themePath = themeURL;
     $.get(
         fileURL,
         function (wData) {
