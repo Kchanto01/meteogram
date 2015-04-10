@@ -227,7 +227,7 @@ Wavegram.prototype.parseWaveData = function () {
             y: rootTmp * 1.3
         });
 
-        var az = atan2(u,v) * (180 / Math.PI);
+        var az = Math.atan2(u,v) * (180 / Math.PI);
         if( az < 0 ){
             az = az + 360;
         }
