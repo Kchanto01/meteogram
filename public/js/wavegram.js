@@ -79,7 +79,13 @@ function getPuntoCardinal (grados) {
     return resultado;
 }
 
-function getSimboloCardinal (grados) {
+function getSimboloCardinal (gradosDireccionViento) {
+    var grados = 0;
+    if( (gradosDireccionViento-180) < 0 ){
+        grados = Math.abs(gradosDireccionViento + 180);
+    } else {
+        grados = Math.abs(gradosDireccionViento - 180);
+    }
 
     var resultado = "";
     if( 348.76 <= grados || grados <= 11.25 ) {
@@ -115,7 +121,6 @@ function getSimboloCardinal (grados) {
     } else if( 326.26 <= grados && grados <= 348.75 ) {
         resultado = "NNW";
     }
-
     return resultado;
 }
 
@@ -203,17 +208,17 @@ Wavegram.prototype.parseWaveData = function () {
         var cNum = 
         wgram.waveHeight.push({
             x: from,
-            y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/sig_wav_ht_surface'] ) // Hsig
+            y: parseFloat( (obj['sig_wav_ht_surface'] != 'NaN') ? obj['sig_wav_ht_surface'] : 0 ) // Hsig
         });
         wgram.maxWaveHeight.push({
             x: from,
-            y: parseFloat( obj['LatLon_14X16-11p0N-87p00W/max_wav_ht_surface'] ) // Hmax
+            y: parseFloat( (obj['max_wav_ht_surface'] != 'NaN') ? obj['max_wav_ht_surface'] : 0 ) // Hmax
         });
 
-        wgram.waveDirection.push( obj['LatLon_14X16-11p0N-87p00W/peak_wav_dir_surface'] - 180 ); // O_h
+        wgram.waveDirection.push( (obj['peak_wav_dir_surface'] != 'NaN') ? (obj['peak_wav_dir_surface'] - 180) : 0 ); // O_h
 
-        var u = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_ucmp_height_above_ground'] );
-        var v = parseFloat( obj['LatLon_27X31-10p25N-87p25W/wnd_vcmp_height_above_ground'] );
+        var u = parseFloat( (obj['u-component_of_wind_height_above_ground'] != 'NaN') ? obj['u-component_of_wind_height_above_ground'] : 0 );
+        var v = parseFloat( (obj['v-component_of_wind_height_above_ground'] != 'NaN') ? obj['v-component_of_wind_height_above_ground'] : 0 );
 
         var rootTmp = Math.sqrt( Math.pow(u,2) + Math.pow(v,2) ) * 3.6;
 
@@ -233,7 +238,7 @@ Wavegram.prototype.parseWaveData = function () {
         }
         wgram.windDirection.push( az );
 
-        wgram.periodo.push( parseFloat( obj['LatLon_14X16-11p0N-87p00W/peak_wav_per_surface'] ) );
+        wgram.periodo.push( parseFloat((obj['peak_wav_per_surface'] != 'NaN') ? obj['peak_wav_per_surface'] : 0 ) );
 
         if (i == 0) {
             pointStart = (from + to) / 2;
