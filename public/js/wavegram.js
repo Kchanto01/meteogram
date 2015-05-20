@@ -17,8 +17,8 @@ function Wavegram(wData, container, container2) {
     this.windContainer = container2;
 
     this.colors = [
-        Highcharts.getOptions().colors[7],
-        Highcharts.getOptions().colors[6]
+        '#87C2EB',
+        '#1F2D52'
     ];
 
     // Run
