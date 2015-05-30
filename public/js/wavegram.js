@@ -919,7 +919,7 @@ Highcharts.Chart.prototype.exportChartLocal = function (options) {
 
 
 // Extend the default options to use the local exporter logic
-Highcharts.getOptions().exporting.buttons.contextButton.menuItems = [{
+/*Highcharts.getOptions().exporting.buttons.contextButton.menuItems = [{
     textKey: 'printChart',
     onclick: function () {
         this.print();
@@ -938,7 +938,7 @@ Highcharts.getOptions().exporting.buttons.contextButton.menuItems = [{
             type: 'image/svg+xml'
         });
     }
-}];
+}];*/
 
 /**
 * Downloads a script and executes a callback when done.
@@ -976,7 +976,7 @@ function initializeWavegram(fileURL, themeURL){
 /**
  * jQuery - On DOM Ready.
  */
-$(function() {
+/*$(function() {
 
     var archivos = ['bahia-salinas', 'I-coco', 'limon', 'P-sur',
                     'puntarenas', 'quepos', 'samara', 'tamarindo'];
@@ -988,4 +988,4 @@ $(function() {
             var wavegram = new Wavegram(data, 'container', 'container2');
         }
     );
-});
+});*/
