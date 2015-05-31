@@ -262,26 +262,23 @@ Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
     var index = tooltip.points[0].point.index,
         ret = '<small>' + traducirFecha(Highcharts.dateFormat('%A, %b %e, %H:%M', (tooltip.x-(3*36e5)))) + ' - ' + Highcharts.dateFormat('%H:%M', (tooltip.x+(3*36e5))) + '</small><br>';
 
-    // Symbol text
-    //ret += '<b>' + this.symbolNames[index] + '</b>';
-
     ret += '<table>';
 
-    var littleStr = "sig";
-    littleStr = littleStr.fontsize(1);
-
-    var hilera = "" + wgram.waveHeight[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'H' + littleStr +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            'm' + '</td></tr>';
-
-    littleStr = 'max';
+    var littleStr = 'max';
     littleStr = littleStr.fontsize(1);
 
     hilera = "" + wgram.maxWaveHeight[index].y;
     ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25CF</span> ' + 'H' + littleStr +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             'm' + '</td></tr>';
+
+    littleStr = "sig";
+    littleStr = littleStr.fontsize(1);
+
+    var hilera = "" + wgram.waveHeight[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[0] + '">\u25C6</span> ' + 'H' + littleStr +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            'm' + '</td></tr>';    
 
     littleStr = 'H';
     littleStr = littleStr.fontsize(1);
@@ -317,20 +314,17 @@ Wavegram.prototype.windTooltipFormatter = function (tooltip) {
     var index = tooltip.points[0].point.index,
         ret = '<small>' + traducirFecha(Highcharts.dateFormat('%A, %b %e, %H:%M', (tooltip.x-(3*36e5)))) + ' - ' + Highcharts.dateFormat('%H:%M', (tooltip.x+(3*36e5))) + '</small><br>';
 
-    // Symbol text
-    //ret += '<b>' + this.symbolNames[index] + '</b>';
-
     ret += '<table>';
 
-    var hilera = "" + wgram.windSpeed[index].y;
-    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'V' +
-            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
-            ' km/h' + '</td></tr>';
-
-    hilera = "" + wgram.maxWindSpeed[index].y;
+    var hilera = "" + wgram.maxWindSpeed[index].y;
     ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25CF</span> ' + 'Ráfaga' +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             ' km/h' + '</td></tr>';
+
+    hilera = "" + wgram.windSpeed[index].y;
+    ret += '<tr><td><span style="color:' + wgram.colors[1] + '">\u25C6</span> ' + 'V' +
+            ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
+            ' km/h' + '</td></tr>';    
 
     var littleStr = "w";
     littleStr = littleStr.fontsize(1);
