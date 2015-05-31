@@ -39,6 +39,10 @@ function parse1Decimal (str) {
     return hilera;
 }
 
+/*
+
+//NO SE ESTA UTILIZANDO
+
 function getPuntoCardinal (grados) {
 
     var resultado = "";
@@ -77,7 +81,7 @@ function getPuntoCardinal (grados) {
     }
 
     return resultado;
-}
+}*/
 
 function getSimboloCardinal (gradosDireccionViento) {
     var grados = 0;
@@ -290,6 +294,9 @@ Wavegram.prototype.waveTooltipFormatter = function (tooltip) {
     ret += '<tr><td><span style="color:#000">\u2190</span>' + 'O' + littleStr +
             ': </td><td style="white-space:nowrap;">' + parse1Decimal(hilera) +
             '\u00B0 (' + getSimboloCardinal(parse1Decimal(hilera)) + ')</td></tr>';
+    console.log("dir: " + wgram.waveDirection[index]);
+    console.log("simbolo: " + getSimboloCardinal(parse1Decimal(hilera)));
+
 
     littleStr = 'P';
     littleStr = littleStr.fontsize(1);
@@ -760,6 +767,12 @@ Wavegram.prototype.drawArrows = function (chart, esWave) {
 
         //simbolo dirercción viento/ola
         var hilera = getSimboloCardinal((esWave)?wavegram.waveDirection[i]:wavegram.windDirection[i]);
+        if(i==6) {
+            console.log("H: " + hilera);
+            console.log("ES? -> " + esWave);
+            console.log("dir: " + (esWave)?wavegram.waveDirection[i]:wavegram.windDirection[i]);
+            console.log("hilera: " + hilera);
+        }
         var offset = 5;
         if (hilera.length==2) {
             offset = 8.5;
